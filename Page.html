@@ -1,0 +1,23 @@
+<html>
+  <link rel="stylesheet" type="text/css" href="./btn.css" />
+  <body>
+    <form
+      action="http://localhost:5000/uploader"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <!-- <h1 class="heading">Please choose a excel file</h1> -->
+      <input type="file" id="main-file" hidden="hidden" />
+      <center>
+        <button type="button" id="upload-Btn">Choose File</button>
+        <br /><br />
+      </center>
+      <span id="upload-text">No file chosen </span>
+      <br /><br /><br /><br />
+      <center><button type="submit" id="subBtn">Submit</button></center>
+      <script src="./app.js"></script>
+      <!-- <input type = "file" name = "file" />
+         <input type = "submit"/> -->
+    </form>
+  </body>
+</html>
