@@ -3,9 +3,7 @@ import openpyxl as op
 import datetime
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-import argparse
-from pathlib import Path
-from UI import opnFile
+
 
 
 # https://rowannicholls.github.io/python/graphs/time_data.html
@@ -15,7 +13,7 @@ def averageTime(arr):
         t = datetime.time(int(item[0:2]),int(item[3:5]))
         seconds = (t.hour * 60 + t.minute) * 60 + t.second
         tot = tot + seconds
-    return datetime.timedelta(seconds=tot//len(arr))
+    return datetime.timedelta(seconds=tot//len(arr)) #with INtime and OUTtime
 
 
 def plotGraph(inTime,outTime,date):
@@ -64,6 +62,60 @@ def plotGraph(inTime,outTime,date):
 
     plt.grid()
     plt.show()
+
+def get_filename(filename):
+    arr = []
+    inTime = []
+    outTime = []
+    listOfDate = []
+# To get path of the file in Command Line
+# parser = argparse.ArgumentParser()
+# parser.add_argument("file_path", type=Path)
+
+# p = parser.parse
+
+# filename = opnFile()
+
+
+    df = pd.read_excel(filename)
+
+
+    workingDays = df.at[0,'Total Days Worked']
+
+    for i in range(12,43):
+        if type(df.iat[0,i]) != str:
+            continue
+        elif(df.iat[0,i] == "WEEKLY OFF"):
+            continue
+        else:
+            arr.append(df.iat[0,i])
+            date = df.columns[i]
+            listOfDate.append(date[0:5])
+
+
+# for item in arr:
+#     inTime.append(item[0:5])
+#     outTime.append(item[12:17])
+
+    for item in arr:
+
+    # intime.append(item[0:5])
+
+    # outtime.append(item[12:17])
+        int_time = item[0:5]
+        if ":" in int_time:
+            int_time= int_time.replace(":",".")
+        inTime.append(int_time)
+    
+        out_time = item[12:17]
+        if ":" in out_time:
+            out_time = out_time.replace(":",".")
+        outTime.append(out_time)
+
+# print(inTime)
+    plotGraph(inTime,outTime,listOfDate)
+
+
     
 # show the plot
     # plt.ylim(8.00,10.00)
@@ -86,54 +138,3 @@ def plotGraph(inTime,outTime,date):
     # plt.show()
 
 
-arr = []
-inTime = []
-outTime = []
-listOfDate = []
-# To get path of the file in Command Line
-# parser = argparse.ArgumentParser()
-# parser.add_argument("file_path", type=Path)
-
-# p = parser.parse
-
-# filename = opnFile()
-
-
-df = pd.read_excel(filename)
-
-
-workingDays = df.at[0,'Total Days Worked']
-
-for i in range(12,43):
-    if type(df.iat[0,i]) != str:
-        continue
-    elif(df.iat[0,i] == "WEEKLY OFF"):
-        continue
-    else:
-        arr.append(df.iat[0,i])
-        date = df.columns[i]
-        listOfDate.append(date[0:5])
-
-
-# for item in arr:
-#     inTime.append(item[0:5])
-#     outTime.append(item[12:17])
-
-for item in arr:
-
-    # intime.append(item[0:5])
-
-    # outtime.append(item[12:17])
-    int_time = item[0:5]
-    if ":" in int_time:
-        int_time= int_time.replace(":",".")
-    inTime.append(int_time)
-    
-    out_time = item[12:17]
-    if ":" in out_time:
-        out_time = out_time.replace(":",".")
-    outTime.append(out_time)
-
-
-# print(inTime)
-plotGraph(inTime,outTime,listOfDate)
